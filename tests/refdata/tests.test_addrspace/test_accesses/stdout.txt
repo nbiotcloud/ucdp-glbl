@@ -1,0 +1,27 @@
+RO Access(name='RO', read=ReadOp(name='R'))
+    title='Read'
+    descr='Read without Modification.'
+RC Access(name='RC', read=ReadOp(name='RC', data=0))
+    title='Read-Clear'
+    descr='Clear on Read.'
+RS Access(name='RS', read=ReadOp(name='RS', data=1))
+    title='Read-Set'
+    descr='Set on Read.'
+WO Access(name='WO', write=WriteOp(name='W', write=''))
+    title='Write'
+    descr='Write Data.'
+W1C Access(name='W1C', write=WriteOp(name='W1C', data='', op='&', write='~'))
+    title='Write-One-Clear'
+    descr='Clear on Write One.'
+W1S Access(name='W1S', write=WriteOp(name='W1S', data='', op='|', write=''))
+    title='Write-One-Set'
+    descr='Set on Write One.'
+RW Access(name='RW', read=ReadOp(name='R'), write=WriteOp(name='W', write=''))
+    title='Read/Write'
+    descr='Read without Modification. Write Data.'
+RW1C Access(name='RW1C', read=ReadOp(name='R'), write=WriteOp(name='W1C', data='', op='&', write='~'))
+    title='Read/Write-One-Clear'
+    descr='Read without Modification. Clear on Write One.'
+RW1S Access(name='RW1S', read=ReadOp(name='R'), write=WriteOp(name='W1S', data='', op='|', write=''))
+    title='Read/Write-One-Set'
+    descr='Read without Modification. Set on Write One.'

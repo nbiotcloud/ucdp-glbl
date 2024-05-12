@@ -1,0 +1,100 @@
+-        -          Const
+-        RO         Const
+-        RC       V FF
+-        RS       V FF
+-        WO         FF
+-        W1C        FF
+-        W1S        FF
+-        RW         FF
+-        RW1C       FF
+-        RW1S       FF
+RO       -          Const
+RO       RO         Const
+RO       RC       V FF
+RO       RS       V FF
+RO       WO         FF
+RO       W1C        FF
+RO       W1S        FF
+RO       RW         FF
+RO       RW1C       FF
+RO       RW1S       FF
+RC       -        V FF
+RC       RO       V FF
+RC       RC       V FF
+RC       RS       V FF
+RC       WO       V FF
+RC       W1C      V FF
+RC       W1S      V FF
+RC       RW       V FF
+RC       RW1C     V FF
+RC       RW1S     V FF
+RS       -        V FF
+RS       RO       V FF
+RS       RC       V FF
+RS       RS       V FF
+RS       WO       V FF
+RS       W1C      V FF
+RS       W1S      V FF
+RS       RW       V FF
+RS       RW1C     V FF
+RS       RW1S     V FF
+WO       -          FF
+WO       RO         FF
+WO       RC       V FF
+WO       RS       V FF
+WO       WO       V FF
+WO       W1C      V FF
+WO       W1S      V FF
+WO       RW       V FF
+WO       RW1C     V FF
+WO       RW1S     V FF
+W1C      -          FF
+W1C      RO         FF
+W1C      RC       V FF
+W1C      RS       V FF
+W1C      WO       V FF
+W1C      W1C      V FF
+W1C      W1S      V FF
+W1C      RW       V FF
+W1C      RW1C     V FF
+W1C      RW1S     V FF
+W1S      -          FF
+W1S      RO         FF
+W1S      RC       V FF
+W1S      RS       V FF
+W1S      WO       V FF
+W1S      W1C      V FF
+W1S      W1S      V FF
+W1S      RW       V FF
+W1S      RW1C     V FF
+W1S      RW1S     V FF
+RW       -          FF
+RW       RO         FF
+RW       RC       V FF
+RW       RS       V FF
+RW       WO       V FF
+RW       W1C      V FF
+RW       W1S      V FF
+RW       RW       V FF
+RW       RW1C     V FF
+RW       RW1S     V FF
+RW1C     -          FF
+RW1C     RO         FF
+RW1C     RC       V FF
+RW1C     RS       V FF
+RW1C     WO       V FF
+RW1C     W1C      V FF
+RW1C     W1S      V FF
+RW1C     RW       V FF
+RW1C     RW1C     V FF
+RW1C     RW1S     V FF
+RW1S     -          FF
+RW1S     RO         FF
+RW1S     RC       V FF
+RW1S     RS       V FF
+RW1S     WO       V FF
+RW1S     W1C      V FF
+RW1S     W1S      V FF
+RW1S     RW       V FF
+RW1S     RW1C     V FF
+RW1S     RW1S     V FF
