@@ -95,7 +95,7 @@ class MemIoType(u.AStructType):
         if self.slicewidths:
             self._add("sel", u.UintType(len(self.slicewidths)), title="Slice Selects")
         if self.err:
-            self._add("err", u.BitType(), title="Memory Access Failed.")
+            self._add("err", u.BitType(), title="Memory Access Failed.", orientation=u.BWD)
 
     @staticmethod
     def with_slicewidth(

@@ -241,7 +241,9 @@ class Field(u.NamedLightObject):
     """Bus Access."""
     core: Access | None
     """Core Access."""
-    offset: int
+    upd_prio: Literal["bus", "core"] | None
+    """Update Priority: None, 'b'us or 'c'core."""
+    offset: int | u.Expr
     """Rightmost Bit Position."""
     is_volatile: bool = False
     """Volatile."""
@@ -251,8 +253,7 @@ class Field(u.NamedLightObject):
     @property
     def slice(self) -> u.Slice:
         """Slice with Word."""
-        left = self.offset + self.type_.width - 1
-        return u.Slice(right=self.offset, left=left)
+        return u.Slice(width=self.type_.width, right=self.offset)
 
     @property
     def is_const(self) -> bool:
@@ -266,6 +267,17 @@ class Field(u.NamedLightObject):
         core = (self.core and self.core.name) or "-"
         return f"{bus}/{core}"
 
+    @property
+    def bus_prio(self) -> bool:
+        """Update prioriy for bus."""
+        if self.upd_prio == "bus":
+            return True
+        if self.upd_prio == "core":
+            return False
+        if self.bus and (self.bus.write or (self.bus.read and self.bus.read.data is not None)):
+            return True
+        return False
+
 
 FieldFilter = Callable[[Field], bool]
 
@@ -275,11 +287,11 @@ class Word(u.NamedObject):
 
     fields: u.Namespace = u.Field(default_factory=u.Namespace, init=False, repr=False)
     """Fields within Word."""
-    offset: int
+    offset: int | u.Expr
     """Rightmost Word Position."""
     width: int
     """Width in Bits."""
-    depth: int | None = None
+    depth: int | u.Expr | None = None
     """Number of words."""
     doc: u.Doc = u.Doc()
     """Documentation"""
@@ -290,9 +302,10 @@ class Word(u.NamedObject):
         type_: u.BaseScalarType,
         bus: Access,
         core: Access | None = None,
-        offset: int | None = None,
+        upd_prio: Literal[None, "bus", "core"] | None = None,
+        offset: int | u.Expr | None = None,
         is_volatile: bool | None = None,
-        align: int | None = None,
+        align: int | u.Expr | None = None,
         title: str | None = None,
         descr: str | None = None,
         comment: str | None = None,
@@ -314,7 +327,15 @@ class Word(u.NamedObject):
         if is_volatile is None:
             is_volatile = get_is_volatile(bus, core)
         field = self._create_field(
-            name=name, type_=type_, bus=bus, core=core, offset=offset, is_volatile=is_volatile, doc=doc, **kwargs
+            name=name,
+            type_=type_,
+            bus=bus,
+            core=core,
+            upd_prio=upd_prio,
+            offset=offset,
+            is_volatile=is_volatile,
+            doc=doc,
+            **kwargs,
         )
         if field.slice.left >= self.width:
             raise ValueError(f"Field {field.name!r} exceeds word width of {self.width}")
@@ -327,8 +348,9 @@ class Word(u.NamedObject):
     @property
     def slice(self) -> u.Slice:
         """Slice with Address Space."""
-        left = self.offset + (self.depth or 1) - 1
-        return u.Slice(right=self.offset, left=left)
+        if self.depth is None:
+            return u.Slice(left=self.offset, right=self.offset)
+        return u.Slice(width=self.depth, right=self.offset)
 
     def lock(self):
         """Lock For Modification."""
@@ -352,9 +374,9 @@ class Addrspace(u.NamedObject):
     def add_word(
         self,
         name: str,
-        offset: int | None = None,
-        align: int | None = None,
-        depth: int | None = None,
+        offset: int | u.Expr | None = None,
+        align: int | u.Expr | None = None,
+        depth: int | u.Expr | None = None,
         title: str | None = None,
         descr: str | None = None,
         comment: str | None = None,
@@ -385,7 +407,7 @@ class Addrspace(u.NamedObject):
     @property
     def size(self) -> Bytes:
         """Size in Bytes."""
-        return bytes_(self.width * self.depth)
+        return bytes_((self.width * self.depth) // 8)
 
     def get_word_hiername(self, word: Word) -> str:
         """Get Hierarchical Word Name."""

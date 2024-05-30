@@ -141,7 +141,7 @@ def test_addrspace():
     assert addrspace.words == u.Namespace([])
     assert addrspace.width == 32
     assert addrspace.depth == 1024
-    assert addrspace.size == u.Bytes("32 KB")
+    assert addrspace.size == u.Bytes("4 KB")
 
 
 def test_addrspace_custom():
@@ -151,7 +151,7 @@ def test_addrspace_custom():
     assert addrspace.words == u.Namespace([])
     assert addrspace.width == 64
     assert addrspace.depth == 128
-    assert addrspace.size == u.Bytes("8 KB")
+    assert addrspace.size == u.Bytes("1 KB")
 
 
 def test_lock():

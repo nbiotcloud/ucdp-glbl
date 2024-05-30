@@ -24,7 +24,7 @@
 
 [project]
 name = "ucdp-glbl"
-version = "0.1.0"
+version = "0.2.0"
 description = "Unified Chip Design Platform - Global"
 readme = "README.md"
 authors = [
@@ -35,7 +35,7 @@ classifiers = [
 ]
 requires-python = ">=3.10.0,<4.0"
 dependencies = [
-    "ucdp>=0.3.0",
+    "ucdp>=0.4.0",
 ]
 
 [project.urls]
