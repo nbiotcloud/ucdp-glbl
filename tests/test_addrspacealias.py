@@ -21,28 +21,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-"""Unified Chip Design Platform - Global."""
+"""Test Address Space."""
 
-from .addrmap import AddrMap
-from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
-from .addrspacealias import AddrspaceAlias
-from .addrspaces import Addrspaces, join_addrspaces
+from ucdp_glbl import Addrspace, AddrspaceAlias
 
-__all__ = [
-    "Access",
-    "ACCESSES",
-    "AddrMap",
-    "Addrspace",
-    "AddrspaceAlias",
-    "Addrspaces",
-    "Defines",
-    "Field",
-    "get_addrmap",
-    "get_addrspaces",
-    "GetAttrspacesFunc",
-    "join_addrspaces",
-    "ReadOp",
-    "Word",
-    "WriteOp",
-]
+
+def test_alias():
+    """Test Alias."""
+    addrspace = Addrspace(name="a", size="1KB")
+    word0 = addrspace.add_word("word0")
+
+    alias = AddrspaceAlias(addrspace=addrspace)
+    other_alias = AddrspaceAlias(addrspace=addrspace, name="foo")
+
+    word1 = addrspace.add_word("word1")
+
+    assert addrspace.name == "a"
+    assert alias.name == "a_alias"
+    assert other_alias.name == "foo"
+    assert tuple(addrspace.words) == (word0, word1)
+    assert tuple(alias.words) == (word0, word1)
+    assert tuple(other_alias.words) == (word0, word1)

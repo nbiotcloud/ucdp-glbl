@@ -21,28 +21,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-"""Unified Chip Design Platform - Global."""
 
-from .addrmap import AddrMap
-from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
-from .addrspacealias import AddrspaceAlias
-from .addrspaces import Addrspaces, join_addrspaces
+"""Command Line Interface."""
 
-__all__ = [
-    "Access",
-    "ACCESSES",
-    "AddrMap",
-    "Addrspace",
-    "AddrspaceAlias",
-    "Addrspaces",
-    "Defines",
-    "Field",
-    "get_addrmap",
-    "get_addrspaces",
-    "GetAttrspacesFunc",
-    "join_addrspaces",
-    "ReadOp",
-    "Word",
-    "WriteOp",
-]
+import click
+from ucdp import cli
+
+from .addrmapfinder import get_addrmap
+
+
+@click.command(
+    help=f"""
+Load Data Model and List Address Map.
+
+TOP: Top Module. {cli.PAT_TOPMODREF}. Environment Variable 'UCDP_TOP'
+"""
+)
+@cli.arg_top
+@cli.opt_path
+@click.option("--full", is_flag=True)
+@cli.pass_ctx
+def lsaddrmap(ctx, top, path, full):
+    """Check."""
+    top = cli.load_top(ctx, top, path)
+    addrmap = get_addrmap(top.mod)
+    print(addrmap.get_overview(skip_words_fields=not full))

@@ -21,28 +21,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-"""Unified Chip Design Platform - Global."""
 
-from .addrmap import AddrMap
-from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
-from .addrspacealias import AddrspaceAlias
-from .addrspaces import Addrspaces, join_addrspaces
+"""
+Address Space Alias.
+"""
 
-__all__ = [
-    "Access",
-    "ACCESSES",
-    "AddrMap",
-    "Addrspace",
-    "AddrspaceAlias",
-    "Addrspaces",
-    "Defines",
-    "Field",
-    "get_addrmap",
-    "get_addrspaces",
-    "GetAttrspacesFunc",
-    "join_addrspaces",
-    "ReadOp",
-    "Word",
-    "WriteOp",
-]
+from .addrspace import Addrspace
+
+
+class AddrspaceAlias(Addrspace):
+    """Address Space Alias."""
+
+    addrspace: Addrspace
+
+    def __init__(self, addrspace: Addrspace, name: str | None = None, **kwargs):
+        joinedkwargs = dict(addrspace)
+        joinedkwargs.update(kwargs)
+        if name is None:
+            name = f"{addrspace.name}_alias"
+        joinedkwargs["name"] = name
+        super().__init__(addrspace=addrspace, **joinedkwargs)

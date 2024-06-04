@@ -21,28 +21,48 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-"""Unified Chip Design Platform - Global."""
 
-from .addrmap import AddrMap
-from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
-from .addrspacealias import AddrspaceAlias
-from .addrspaces import Addrspaces, join_addrspaces
+"""
+Memory.
+"""
 
-__all__ = [
-    "Access",
-    "ACCESSES",
-    "AddrMap",
-    "Addrspace",
-    "AddrspaceAlias",
-    "Addrspaces",
-    "Defines",
-    "Field",
-    "get_addrmap",
-    "get_addrspaces",
-    "GetAttrspacesFunc",
-    "join_addrspaces",
-    "ReadOp",
-    "Word",
-    "WriteOp",
-]
+import ucdp as u
+
+
+class LevelIrqType(u.AEnumType):
+    """
+    Level IRQ.
+
+    >>> import ucdp_glbl
+    >>> irq = ucdp_glbl.types.LevelIrqType()
+    >>> irq
+    LevelIrqType()
+    >>> irq.width
+    1
+    >>> for item in irq.values(): print(item)
+    EnumItem(0, 'idle')
+    EnumItem(1, 'active')
+    """
+
+    keytype: u.BitType = u.BitType()
+
+    comment: str = "Level IRQ"
+
+    def _build(self) -> None:
+        self._add(0, "idle")
+        self._add(1, "active")
+
+
+class ToggleIrqType(u.BitType):
+    """
+    Toggle IRQ.
+
+    >>> import ucdp_glbl
+    >>> irq = ucdp_glbl.types.LevelIrqType()
+    >>> irq
+    LevelIrqType()
+    >>> irq.width
+    1
+    """
+
+    comment: str = "Toggle IRQ"

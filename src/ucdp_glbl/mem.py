@@ -60,9 +60,9 @@ class MemIoType(u.AStructType):
     RAM Example with Byte Access and error:
 
         >>> from ucdp_glbl.mem import MemIoType
-        >>> iotype = MemIoType.with_slicewidth(datawidth=32, addrwidth=8, writable=True, slicewidth=8)
+        >>> iotype = MemIoType.with_slicewidth(datawidth=32, addrwidth=8, writable=True, slicewidth=8, err=True)
         >>> iotype
-        MemIoType(datawidth=32, addrwidth=8, writable=True, slicewidths=(8, 8, 8, 8))
+        MemIoType(datawidth=32, addrwidth=8, writable=True, slicewidths=(8, 8, 8, 8), err=True)
         >>> for item in iotype.values(): print(item)
         StructItem('ena', EnaType(), doc=Doc(title='Memory Access Enable'))
         StructItem('addr', UintType(8), doc=Doc(title='Memory Address'))
@@ -70,6 +70,15 @@ class MemIoType(u.AStructType):
         StructItem('wdata', UintType(32), doc=Doc(title='Memory Write Data'))
         StructItem('rdata', UintType(32), orientation=BWD, doc=Doc(title='Memory Read Data'))
         StructItem('sel', UintType(4), doc=Doc(title='Slice Selects'))
+        StructItem('err', BitType(), orientation=BWD, doc=Doc(title='Memory Access Failed.'))
+
+    Non-Slicable:
+
+        >>> MemIoType.with_slicewidth(datawidth=31, addrwidth=8, writable=True, slicewidth=8)
+        Traceback (most recent call last):
+        ...
+        ValueError: Cannot split 31 bits into slices of 8 bits
+
     """
 
     datawidth: int | u.Expr
