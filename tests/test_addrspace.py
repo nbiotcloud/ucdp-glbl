@@ -28,7 +28,18 @@ import re
 import ucdp as u
 from pytest import fixture, raises
 from test2ref import assert_refdata
-from ucdp_glbl.addrspace import ACCESSES, RO, RW, Addrspace, Field, Word, get_is_const, get_is_volatile
+from ucdp_glbl.addrspace import (
+    ACCESSES,
+    RO,
+    RW,
+    Addrspace,
+    Field,
+    Word,
+    create_fill_field,
+    create_fill_word,
+    get_is_const,
+    get_is_volatile,
+)
 
 
 @fixture
@@ -452,3 +463,12 @@ def test_addrspace_iter_fill_word_fill_field(sparse_addrspace, tmp_path):
         name="dump_1_1",
     )
     assert_refdata(test_addrspace_iter_fill_word_fill_field, tmp_path)
+
+
+def test_addrspace_iter_fill_defaults(sparse_addrspace, tmp_path):
+    """Iterate with filling."""
+    _dump_addrspace(
+        sparse_addrspace.iter(fill_word=create_fill_word, fill_field=create_fill_field),
+        tmp_path,
+    )
+    assert_refdata(test_addrspace_iter_fill_defaults, tmp_path)

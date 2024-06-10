@@ -708,11 +708,11 @@ def get_is_const(bus: Access | None, core: Access | None) -> bool:
     return True
 
 
-def create_fill_word(idx, offset, depth) -> Word:
+def create_fill_word(addrspace, idx, offset, depth) -> Word:
     """Create Fill Word."""
-    return Word(name=f"reserved{idx}", offset=offset, depth=depth)
+    return Word(name=f"reserved{idx}", offset=offset, depth=depth, width=addrspace.width)
 
 
-def create_fill_field(idx, offset, depth) -> Field:
+def create_fill_field(word, idx, offset, width) -> Field:
     """Create Fill Field."""
-    return Field(name=f"reserved{idx}", offset=offset, depth=depth)
+    return Field(name=f"reserved{idx}", type_=u.UintType(width), offset=offset)
