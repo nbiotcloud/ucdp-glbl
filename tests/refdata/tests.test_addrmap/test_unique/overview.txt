@@ -1,8 +1,6 @@
-
-
 Size: 1.98 GB
 
-| Namespace | Type | Base       | Size           | Attributes   |
+| Addrspace | Type | Base       | Size           | Attributes   |
 | --------- | ---- | ----       | ----           | ----------   |
 | one       | -    | +0x1000    | 1024x32 (4 KB) | Sub,Volatile |
 | two       | -    | +0x3000    | 1024x32 (4 KB) | Sub          |

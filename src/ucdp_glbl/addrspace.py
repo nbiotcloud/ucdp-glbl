@@ -696,14 +696,14 @@ def get_is_volatile(bus: Access | None, core: Access | None) -> bool:
 def get_is_const(bus: Access | None, core: Access | None) -> bool:
     """Calc Is Constant Flag based on Accesses."""
     if bus is not None:
-        if bus.write:
+        if bus.write is not None:
             return False
         if bus.read and bus.read.data is not None:
             return False
     if core is not None:
         if core.read and core.read.data is not None:
             return False
-        if core.write:
+        if core.write is not None:
             return False
     return True
 

@@ -21,34 +21,43 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-"""Unified Chip Design Platform - Global."""
 
-from .addrdecoder import AddrDecoder
+"""
+Demux.
+"""
+
+from logging import getLogger
+
+import ucdp as u
+
 from .addrmap import AddrMap
-from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
-from .addrslave import AddrSlave
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
-from .addrspacealias import AddrspaceAlias
+from .addrmapfinder import get_addrspaces
 from .addrspaces import Addrspaces, join_addrspaces
 from .const import NOREF
 
-__all__ = [
-    "Access",
-    "ACCESSES",
-    "AddrDecoder",
-    "AddrMap",
-    "AddrSlave",
-    "Addrspace",
-    "AddrspaceAlias",
-    "Addrspaces",
-    "Defines",
-    "Field",
-    "get_addrmap",
-    "get_addrspaces",
-    "GetAttrspacesFunc",
-    "join_addrspaces",
-    "NOREF",
-    "ReadOp",
-    "Word",
-    "WriteOp",
-]
+LOGGER = getLogger(__name__)
+
+
+class AddrDecoder(u.Object):
+    """
+    Demultiplexer.
+    """
+
+    addrmap: AddrMap = u.Field(default_factory=lambda: AddrMap(unique=True))
+    """Address Map for All Slaves."""
+
+    slaves: u.Namespace = u.Field(default_factory=u.Namespace)
+    """Slaves."""
+
+    default_size: u.Bytes | None = None
+    """Default Size if not given."""
+
+    is_sub: bool = False
+
+    def get_addrspaces(self, **kwargs) -> Addrspaces:
+        """Address Spaces."""
+        for addrspace in self.addrmap:
+            ref = addrspace.slave.ref
+            if ref is None or ref is NOREF:
+                continue
+            yield from join_addrspaces(addrspace, get_addrspaces(ref, kwargs))

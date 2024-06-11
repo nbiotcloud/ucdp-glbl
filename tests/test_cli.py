@@ -43,11 +43,9 @@ def test_lsaddrmap(runner, testdata_path):
     result = runner.invoke(ucdp, ["lsaddrmap", "top_lib.top"])
     assert result.exit_code == 0
     lines = [
-        "",
-        "",
         "Size: 268 KB",
         "",
-        "| Namespace | Type | Base    | Size           | Attributes |",
+        "| Addrspace | Type | Base    | Size           | Attributes |",
         "| --------- | ---- | ----    | ----           | ---------- |",
         "| one       | -    | 0x11000 | 512x32 (2 KB)  |            |",
         "| two       | -    | 0x12000 | 1024x32 (4 KB) |            |",
@@ -60,11 +58,9 @@ def test_lsaddrmap(runner, testdata_path):
     result = runner.invoke(ucdp, ["lsaddrmap", "top_lib.top", "--full"])
     assert result.exit_code == 0
     lines = [
-        "",
-        "",
         "Size: 268 KB",
         "",
-        "| Namespace | Type | Base    | Size           | Attributes |",
+        "| Addrspace | Type | Base    | Size           | Attributes |",
         "| --------- | ---- | ----    | ----           | ---------- |",
         "| one       | -    | 0x11000 | 512x32 (2 KB)  |            |",
         "| two       | -    | 0x12000 | 1024x32 (4 KB) |            |",

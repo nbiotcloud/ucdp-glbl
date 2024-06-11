@@ -39,7 +39,7 @@ TOP: Top Module. {cli.PAT_TOPMODREF}. Environment Variable 'UCDP_TOP'
 )
 @cli.arg_top
 @cli.opt_path
-@click.option("--full", is_flag=True)
+@click.option("--full", "-f", is_flag=True)
 @cli.pass_ctx
 def lsaddrmap(ctx, top, path, full):
     """Check."""

@@ -21,34 +21,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-"""Unified Chip Design Platform - Global."""
 
-from .addrdecoder import AddrDecoder
-from .addrmap import AddrMap
-from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
-from .addrslave import AddrSlave
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
-from .addrspacealias import AddrspaceAlias
-from .addrspaces import Addrspaces, join_addrspaces
-from .const import NOREF
+"""
+Constants.
+"""
 
-__all__ = [
-    "Access",
-    "ACCESSES",
-    "AddrDecoder",
-    "AddrMap",
-    "AddrSlave",
-    "Addrspace",
-    "AddrspaceAlias",
-    "Addrspaces",
-    "Defines",
-    "Field",
-    "get_addrmap",
-    "get_addrspaces",
-    "GetAttrspacesFunc",
-    "join_addrspaces",
-    "NOREF",
-    "ReadOp",
-    "Word",
-    "WriteOp",
-]
+import ucdp as u
+
+NOREF = u.Object()

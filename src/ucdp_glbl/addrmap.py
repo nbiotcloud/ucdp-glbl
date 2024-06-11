@@ -33,6 +33,7 @@ import ucdp as u
 from icdutil import num
 
 from .addrspace import Addrspace
+from .addrspaces import Addrspaces
 
 
 class AddrMap(u.Object):
@@ -40,6 +41,14 @@ class AddrMap(u.Object):
 
     unique: bool = False
     fixed_size: u.Bytes | None = None
+
+    @staticmethod
+    def from_addrspaces(addrspaces: Addrspaces, unique: bool = False, fixed_size: u.Bytes | None = None) -> "AddrMap":
+        """Create From address spaces."""
+        addrmap = AddrMap(unique=unique, fixed_size=fixed_size)
+        for addrspace in addrspaces:
+            addrmap.add(addrspace)
+        return addrmap
 
     _addrspaces: list[Addrspace] = u.PrivateField(default_factory=list)
 
@@ -167,7 +176,7 @@ class AddrMap(u.Object):
         """
         Return overview table.
         """
-        parts = ["", f"Size: {self.size}"]
+        parts = [f"Size: {self.size}"]
         if not skip_addrspaces:
             parts.append(self._get_addrspaces_overview())
         if not skip_words_fields:
@@ -176,7 +185,7 @@ class AddrMap(u.Object):
 
     def _get_addrspaces_overview(self) -> str:
         data = [
-            ("Namespace", "Type", "Base", "Size", "Attributes"),
+            ("Addrspace", "Type", "Base", "Size", "Attributes"),
             ("---------", "----", "----", "----", "----------"),
         ]
         for addrspace in self:

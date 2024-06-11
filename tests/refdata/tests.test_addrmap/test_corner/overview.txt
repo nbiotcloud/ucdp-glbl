@@ -1,8 +1,6 @@
-
-
 Size: 8 KB
 
-| Namespace | Type | Base    | Size           | Attributes   |
+| Addrspace | Type | Base    | Size           | Attributes   |
 | --------- | ---- | ----    | ----           | ----------   |
 | zero      | -    | +0x0    | 1024x32 (4 KB) | Sub          |
 | one       | -    | +0x1000 | 1024x32 (4 KB) | Sub,Volatile |

@@ -1,8 +1,6 @@
-
-
 Size: None
 
-| Namespace | Type | Base | Size | Attributes |
+| Addrspace | Type | Base | Size | Attributes |
 | --------- | ---- | ---- | ---- | ---------- |
 
 
