@@ -28,7 +28,7 @@ import re
 import ucdp as u
 from pytest import fixture, raises
 from test2ref import assert_refdata
-from ucdp_glbl import AddrMap, Addrspace, AddrspaceAlias
+from ucdp_glbl import AddrMap, Addrspace, AddrspaceAlias, create_fill_addrspace
 
 
 @fixture
@@ -128,6 +128,20 @@ def test_growing(tmp_path, one, two, three, four, alias):
     addrmap.add(four)
 
     assert tuple(addrmap) == (one, two, four, alias, three)
+    assert tuple(addrmap.iter()) == (one, two, four, alias, three)
+    assert tuple(addrmap.iter(filter_=lambda addrspace: addrspace.name != "two")) == (one, four, alias, three)
+
+    with (tmp_path / "iter-fillfunc.txt").open("w") as file:
+        for item in addrmap.iter(fill=create_fill_addrspace):
+            file.write(f"{item}\n")
+
+    with (tmp_path / "iter-filltrue.txt").open("w") as file:
+        for item in addrmap.iter(fill=True):
+            file.write(f"{item}\n")
+
+    with (tmp_path / "iter-fill-filter.txt").open("w") as file:
+        for item in addrmap.iter(fill=True, filter_=lambda addrspace: addrspace.name != "two"):
+            file.write(f"{item}\n")
 
     (tmp_path / "overview.txt").write_text(addrmap.get_overview())
     assert_refdata(test_growing, tmp_path)

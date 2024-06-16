@@ -22,27 +22,14 @@
 # SOFTWARE.
 #
 
-"""Command Line Interface."""
-
-import click
-from ucdp import cli
-
-from .addrmapfinder import get_addrmap
-
-
-@click.command(
-    help=f"""
-Load Data Model and List Address Map.
-
-TOP: Top Module. {cli.PAT_TOPMODREF}. Environment Variable 'UCDP_TOP'
 """
-)
-@cli.arg_top
-@cli.opt_path
-@click.option("--full", "-f", is_flag=True)
-@cli.pass_ctx
-def lsaddrmap(ctx, top, path, full):
-    """Check."""
-    top = cli.load_top(ctx, top, path)
-    addrmap = get_addrmap(top.mod)
-    print(addrmap.get_overview(minimal=not full))
+Generic Master.
+"""
+
+import ucdp as u
+
+
+class AddrMaster(u.NamedObject):
+    """
+    Master.
+    """

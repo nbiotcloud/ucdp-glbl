@@ -24,10 +24,24 @@
 """Unified Chip Design Platform - Global."""
 
 from .addrdecoder import AddrDecoder
-from .addrmap import AddrMap
+from .addrmap import AddrMap, create_fill_addrspace
 from .addrmapfinder import Defines, GetAttrspacesFunc, get_addrmap, get_addrspaces
+from .addrmaster import AddrMaster
+from .addrmatrix import AddrMatrix
+from .addrref import AddrRef
 from .addrslave import AddrSlave
-from .addrspace import ACCESSES, Access, Addrspace, Field, ReadOp, Word, WriteOp
+from .addrspace import (
+    ACCESSES,
+    Access,
+    Addrspace,
+    Field,
+    ReadOp,
+    ReservedAddrspace,
+    Word,
+    WriteOp,
+    create_fill_field,
+    create_fill_word,
+)
 from .addrspacealias import AddrspaceAlias
 from .addrspaces import Addrspaces, join_addrspaces
 from .const import NOREF
@@ -37,10 +51,17 @@ __all__ = [
     "ACCESSES",
     "AddrDecoder",
     "AddrMap",
+    "AddrMaster",
+    "ReservedAddrspace",
+    "AddrMatrix",
+    "AddrRef",
     "AddrSlave",
     "Addrspace",
     "AddrspaceAlias",
     "Addrspaces",
+    "create_fill_addrspace",
+    "create_fill_field",
+    "create_fill_word",
     "Defines",
     "Field",
     "get_addrmap",

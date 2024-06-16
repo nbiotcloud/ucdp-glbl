@@ -381,6 +381,21 @@ FillWordFactory = Callable[["Addrspace", int, int, int], Word]
 FillFieldFactory = Callable[[Word, int, int, int], Field]
 
 
+def calc_depth_size(width: int, depth: int | None, size: u.Bytes | None) -> tuple[int, u.Bytes]:
+    """Calc either depth or size."""
+    # Provide either 'size' or 'depth' and calculate the other
+    if size is None:
+        if depth is None:
+            raise ValueError("Either 'depth' or 'size' are required.")
+        size = bytes_((width * depth) // 8)
+    else:
+        depth_calculated = int(bytes_(size) * 8 // width)
+        if depth is not None and depth != depth_calculated:
+            raise ValueError("'depth' and 'size' are mutally exclusive.")
+        depth = depth_calculated
+    return depth, size
+
+
 class Addrspace(u.NamedObject):
     """Address Space."""
 
@@ -410,16 +425,7 @@ class Addrspace(u.NamedObject):
         core: Access | str | None = None,
         **kwargs,
     ):
-        # Provide either 'size' or 'depth' and calculate the other
-        if size is None:
-            if depth is None:
-                raise ValueError("Either 'depth' or 'size' are required.")
-            size = bytes_((width * depth) // 8)
-        else:
-            depth_calculated = int(bytes_(size) * 8 // width)
-            if depth is not None and depth != depth_calculated:
-                raise ValueError("'depth' and 'size' are mutally exclusive.")
-            depth = depth_calculated
+        depth, size = calc_depth_size(width, depth, size)
         if bus is not None:
             bus = cast_access(bus)
         if core is not None:
@@ -542,8 +548,8 @@ class Addrspace(u.NamedObject):
         self,
         wordfilter: WordFilter | None = None,
         fieldfilter: FieldFilter | None = None,
-        fill_word: FillWordFactory | None = None,
-        fill_field: FillFieldFactory | None = None,
+        fill_word: FillWordFactory | bool | None = None,
+        fill_field: FillFieldFactory | bool | None = None,
         fill_word_end: bool = False,
         fill_field_end: bool = False,
     ) -> Iterator[WordFields]:
@@ -559,9 +565,15 @@ class Addrspace(u.NamedObject):
 
         fieldfilter = fieldfilter or no_fieldfilter
 
+        if fill_word is True:
+            fill_word = create_fill_word
+
+        if fill_field is True:
+            fill_field = create_fill_field
+
         def create_word(counter, offset, size) -> WordFields:
             idx = counter[None]
-            fword = fill_word(self, idx, offset, size)
+            fword = fill_word(self, idx, offset, size)  # type: ignore[operator]
             counter[None] = idx + 1
             if fill_field and fill_field_end:
                 return fword, (fill_field(fword, 0, 0, word.width),)
@@ -716,3 +728,7 @@ def create_fill_word(addrspace, idx, offset, depth) -> Word:
 def create_fill_field(word, idx, offset, width) -> Field:
     """Create Fill Field."""
     return Field(name=f"reserved{idx}", type_=u.UintType(width), offset=offset)
+
+
+class ReservedAddrspace(Addrspace):
+    """A Reserved Address Space."""

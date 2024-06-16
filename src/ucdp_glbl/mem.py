@@ -26,7 +26,11 @@
 Memory.
 """
 
+from typing import TypeAlias
+
 import ucdp as u
+
+SliceWidths: TypeAlias = tuple[int | u.Expr, ...]
 
 
 class MemIoType(u.AStructType):
@@ -87,7 +91,7 @@ class MemIoType(u.AStructType):
     """Address Width in Bits."""
     writable: bool
     """Read-Only or Read/Writable Memory."""
-    slicewidths: tuple[int | u.Expr, ...] | None = None
+    slicewidths: SliceWidths | None = None
     """Word Slices for Modification, Sum MUST be identical to datawidth."""
     err: bool = False
     """Report Access Error."""
@@ -115,9 +119,15 @@ class MemIoType(u.AStructType):
         err: bool = False,
     ) -> "MemIoType":
         """With Slices."""
-        if slicewidth:
-            if datawidth % slicewidth != 0:
-                raise ValueError(f"Cannot split {datawidth} bits into slices of {slicewidth} bits")
-            slices = datawidth // slicewidth
-            slicewidths = (slicewidth,) * slices
+        slicewidths = calc_slicewidths(datawidth, slicewidth)
         return MemIoType(datawidth=datawidth, addrwidth=addrwidth, writable=writable, slicewidths=slicewidths, err=err)
+
+
+def calc_slicewidths(datawidth: int | u.Expr, slicewidth: int | u.Expr | None = None) -> SliceWidths | None:
+    """Calculate slicewidths."""
+    if slicewidth is None:
+        return None
+    if datawidth % slicewidth != 0:
+        raise ValueError(f"Cannot split {datawidth} bits into slices of {slicewidth} bits")
+    slices = datawidth // slicewidth
+    return (slicewidth,) * slices

@@ -431,6 +431,7 @@ def test_addrspace_iter(sparse_addrspace, tmp_path):
 def test_addrspace_iter_fill_word(sparse_addrspace, tmp_path):
     """Iterate with word filling."""
     _dump_addrspace(sparse_addrspace.iter(fill_word=_create_word), tmp_path, name="dump")
+    _dump_addrspace(sparse_addrspace.iter(fill_word=True), tmp_path, name="dump-true")
     _dump_addrspace(sparse_addrspace.iter(fill_word=_create_word, fill_word_end=True), tmp_path, name="dump_end")
     assert_refdata(test_addrspace_iter_fill_word, tmp_path)
 
@@ -438,6 +439,7 @@ def test_addrspace_iter_fill_word(sparse_addrspace, tmp_path):
 def test_addrspace_iter_fill_field(sparse_addrspace, tmp_path):
     """Iterate with field filling."""
     _dump_addrspace(sparse_addrspace.iter(fill_field=_create_field), tmp_path, name="dump")
+    _dump_addrspace(sparse_addrspace.iter(fill_field=True), tmp_path, name="dump-true")
     _dump_addrspace(sparse_addrspace.iter(fill_field=_create_field, fill_field_end=True), tmp_path, name="dump_end")
     assert_refdata(test_addrspace_iter_fill_field, tmp_path)
 

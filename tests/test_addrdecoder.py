@@ -103,6 +103,6 @@ def test_addrrange():
     assert addrspace.size == 5 * 1024
 
     two = AddrSlave(name="two", addrdecoder=decoder)
-    msg = "subbaseaddr 7168 is not aligned to size 4096"
+    msg = "baseaddr 7168 is not aligned to size 4096"
     with raises(ValueError, match=re.escape(msg)):
-        two.add_addrrange(subbaseaddr=7 * 1024, size=4 * 1024)
+        two.add_addrrange(baseaddr=7 * 1024, size=4 * 1024)

@@ -26,14 +26,17 @@
 Address Map.
 """
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 
 import aligntext
 import ucdp as u
 from icdutil import num
 
-from .addrspace import Addrspace
+from .addrspace import Addrspace, ReservedAddrspace
 from .addrspaces import Addrspaces
+
+FillAddrspaceFactory = Callable[[int, int, int], Addrspace]
+AddrspaceFilter = Callable[[Addrspace], bool]
 
 
 class AddrMap(u.Object):
@@ -65,6 +68,50 @@ class AddrMap(u.Object):
 
     def __iter__(self) -> Iterator[Addrspace]:
         yield from self._addrspaces
+
+    def iter(  # noqa: C901
+        self,
+        filter_: AddrspaceFilter | None = None,
+        fill: FillAddrspaceFactory | bool | None = None,
+    ) -> Iterator[Addrspace]:
+        """Iterate over Address Spaces."""
+
+        def no_addrspacefilter(_: Addrspace) -> bool:
+            return True
+
+        if fill is True:
+            fill = create_fill_addrspace
+
+        if not fill:
+            if filter_ is None:
+                yield from self._addrspaces
+            else:
+                for addrspace in self._addrspaces:
+                    if filter_(addrspace):
+                        yield addrspace
+        else:
+            filter_ = filter_ or no_addrspacefilter
+            baseaddr = 0
+            idx = 0
+            for addrspace in self._addrspaces:
+                if not filter_(addrspace):
+                    continue
+
+                # fill before
+                if addrspace.baseaddr > baseaddr:
+                    yield fill(idx, baseaddr, addrspace.baseaddr - baseaddr)
+                    idx += 1
+
+                # element
+                yield addrspace
+                baseaddr = addrspace.nextaddr
+
+            if self.addrwidth:
+                nextaddr = 2**self.addrwidth
+
+                # fill end
+                if nextaddr > baseaddr:
+                    yield fill(idx, baseaddr, nextaddr - baseaddr)
 
     @property
     def size(self) -> u.Bytes | None:
@@ -172,23 +219,21 @@ class AddrMap(u.Object):
             addr = num.align(item.nextaddr, align=align)
         return addr
 
-    def get_overview(self, skip_addrspaces: bool = False, skip_words_fields: bool = False) -> str:
+    def get_overview(self, minimal: bool = False, fill: FillAddrspaceFactory | bool | None = None) -> str:
         """
         Return overview table.
         """
-        parts = [f"Size: {self.size}"]
-        if not skip_addrspaces:
-            parts.append(self._get_addrspaces_overview())
-        if not skip_words_fields:
+        parts = [f"Size: {self.size}", self._get_addrspaces_overview(fill=fill)]
+        if not minimal:
             parts.append(self._get_word_fields_overview())
         return "\n\n".join(parts)
 
-    def _get_addrspaces_overview(self) -> str:
+    def _get_addrspaces_overview(self, fill) -> str:
         data = [
             ("Addrspace", "Type", "Base", "Size", "Attributes"),
             ("---------", "----", "----", "----", "----------"),
         ]
-        for addrspace in self:
+        for addrspace in self.iter(fill=fill):
             classname = addrspace.__class__.__name__.replace("Addrspace", "") or "-"
             attrs = []
             if addrspace.is_sub:
@@ -293,3 +338,8 @@ class AddrMap(u.Object):
         else:
             if addrspace.is_overlapping(upper):
                 raise ValueError(f"{addrspace!r} overlaps with {upper!r}")
+
+
+def create_fill_addrspace(idx, baseaddr, size) -> Addrspace:
+    """Create Fill Addrspace."""
+    return ReservedAddrspace(name=f"reserved{idx}", baseaddr=baseaddr, size=size, is_sub=False)

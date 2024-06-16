@@ -30,6 +30,7 @@ import ucdp as u
 from icdutil import num
 
 from .addrdecoder import AddrDecoder
+from .addrref import AddrRef
 from .addrspace import Addrspace
 
 
@@ -41,15 +42,15 @@ class AddrSlave(u.NamedObject):
     addrdecoder: AddrDecoder = u.Field(repr=False)
     """Demultiplexer Addressing This Slave."""
 
-    ref: u.Object | str | None = None
+    ref: AddrRef | None = None
     """Addressed Module."""
 
-    def add_addrrange(self, subbaseaddr=u.AUTO, size: u.Bytes | None = None) -> "SlaveAddrspace":
+    def add_addrrange(self, baseaddr=u.AUTO, size: u.Bytes | None = None) -> "SlaveAddrspace":
         """
         Add Address Range.
 
         Keyword Args:
-            subbaseaddr: Sub Start Address. Take next free if 'AUTO'.
+            baseaddr: Sub Start Address. Take next free if 'AUTO'.
             size: Address Range Size (i.e. '4k')
             ref: Referenced Object or instance path to it.
         """
@@ -62,17 +63,17 @@ class AddrSlave(u.NamedObject):
         else:
             size = u.Bytes(size)
 
-        # subbaseaddr
+        # baseaddr
         if size is not None:
             align = num.calc_next_power_of(size)
-            if subbaseaddr is u.AUTO:
-                subbaseaddr = addrmap.get_free_baseaddr(align)
-            if subbaseaddr != num.align(subbaseaddr, align=align):
-                raise ValueError(f"subbaseaddr {subbaseaddr!r} is not aligned to size {align!r}")
+            if baseaddr is u.AUTO:
+                baseaddr = addrmap.get_free_baseaddr(align)
+            if baseaddr != num.align(baseaddr, align=align):
+                raise ValueError(f"baseaddr {baseaddr!r} is not aligned to size {align!r}")
 
         addrspace = SlaveAddrspace(
             name=self.name,
-            baseaddr=subbaseaddr,
+            baseaddr=baseaddr,
             size=size,
             slave=self,
             is_sub=addrdecoder.is_sub,

@@ -32,6 +32,7 @@ import ucdp as u
 
 from .addrmap import AddrMap
 from .addrmapfinder import get_addrspaces
+from .addrref import AddrRef
 from .addrspaces import Addrspaces, join_addrspaces
 from .const import NOREF
 
@@ -53,11 +54,19 @@ class AddrDecoder(u.Object):
     """Default Size if not given."""
 
     is_sub: bool = False
+    """Just decode address LSBs."""
 
     def get_addrspaces(self, **kwargs) -> Addrspaces:
         """Address Spaces."""
         for addrspace in self.addrmap:
             ref = addrspace.slave.ref
-            if ref is None or ref is NOREF:
+            if ref is None:
+                LOGGER.warning("%s: %s does not reference anything", self, addrspace)
                 continue
+            if ref is NOREF:
+                continue
+            ref = self._resolve_ref(ref)
             yield from join_addrspaces(addrspace, get_addrspaces(ref, kwargs))
+
+    def _resolve_ref(self, ref: AddrRef) -> AddrRef:
+        return ref

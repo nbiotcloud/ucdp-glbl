@@ -1,0 +1,8 @@
+ Master > Slave
+----------------
+
+
+Size: None
+
+| Addrspace | Type | Base | Size | Attributes |
+| --------- | ---- | ---- | ---- | ---------- |
