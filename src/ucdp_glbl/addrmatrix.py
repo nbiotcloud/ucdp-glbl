@@ -47,8 +47,8 @@ class AddrMatrix(AddrDecoder):
     masters: u.Namespace = u.Field(default_factory=u.Namespace)
     """Masters."""
 
-    _master_slaves = u.PrivateField(default_factory=lambda: defaultdict(set))
-    _slave_masters = u.PrivateField(default_factory=lambda: defaultdict(set))
+    _master_slaves = u.PrivateField(default_factory=lambda: defaultdict(list))
+    _slave_masters = u.PrivateField(default_factory=lambda: defaultdict(list))
 
     def _add_master(
         self,
@@ -79,8 +79,8 @@ class AddrMatrix(AddrDecoder):
             for slavename in u.split(slavenames):
                 if slavename in self._master_slaves[mastername]:
                     LOGGER.warning("%s: interconnect %s -> %s already exists", self, mastername, slavename)
-                self._master_slaves[mastername].add(slavename)
-                self._slave_masters[slavename].add(mastername)
+                self._master_slaves[mastername].append(slavename)
+                self._slave_masters[slavename].append(mastername)
 
     @property
     def master_slaves(self) -> tuple[tuple[AddrMaster, tuple[AddrSlave, ...]], ...]:
