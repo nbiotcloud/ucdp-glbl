@@ -1,8 +1,0 @@
-Size: None
-
-| Addrspace | Type | Base | Size | Attributes |
-| --------- | ---- | ---- | ---- | ---------- |
-
-
-| Addrspace | Word | Field | Offset | Access | Reset | Attributes |
-| --------- | ---- | ----- | ------ | ------ | ----- | ---------- |

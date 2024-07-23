@@ -23,10 +23,10 @@
 #
 
 """
-Memory.
+Memory Types.
 """
 
-from typing import TypeAlias
+from typing import Literal, TypeAlias
 
 import ucdp as u
 
@@ -36,6 +36,14 @@ SliceWidths: TypeAlias = tuple[int | u.Expr, ...]
 class MemIoType(u.AStructType):
     """
     Memory IO-Type.
+
+    Attributes:
+        datawidth: Data Width in Bits
+        addrwidth: Address Width in Bits
+        writable: Read-Only or Read/Writable Memory
+        slicewidths: Word Slices for Modification, Sum MUST be identical to datawidth
+        err: Report Access Error
+        addressing: Addressing Mode
 
     ROM Example:
 
@@ -86,15 +94,11 @@ class MemIoType(u.AStructType):
     """
 
     datawidth: int | u.Expr
-    """Data Width in Bits."""
     addrwidth: int | u.Expr
-    """Address Width in Bits."""
     writable: bool
-    """Read-Only or Read/Writable Memory."""
     slicewidths: SliceWidths | None = None
-    """Word Slices for Modification, Sum MUST be identical to datawidth."""
     err: bool = False
-    """Report Access Error."""
+    addressing: Literal["byte", "word"] = "byte"
 
     def _build(self):
         datatype = u.UintType(self.datawidth)
@@ -124,7 +128,18 @@ class MemIoType(u.AStructType):
 
 
 def calc_slicewidths(datawidth: int | u.Expr, slicewidth: int | u.Expr | None = None) -> SliceWidths | None:
-    """Calculate slicewidths."""
+    """
+    Calculate slicewidths.
+
+        >>> calc_slicewidths(32) is None
+        True
+        >>> calc_slicewidths(32, slicewidth=8)
+        (8, 8, 8, 8)
+        >>> calc_slicewidths(32, slicewidth=5)
+        Traceback (most recent call last):
+          ...
+        ValueError: Cannot split 32 bits into slices of 5 bits
+    """
     if slicewidth is None:
         return None
     if datawidth % slicewidth != 0:

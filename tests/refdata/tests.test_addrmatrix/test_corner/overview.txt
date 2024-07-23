@@ -1,9 +1,0 @@
- Master > Slave    slv
-----------------  -----
-      mst
-
-
-Size: None
-
-| Addrspace | Type | Base | Size | Attributes |
-| --------- | ---- | ---- | ---- | ---------- |

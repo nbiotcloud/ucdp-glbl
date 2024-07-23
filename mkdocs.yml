@@ -30,6 +30,11 @@ nav:
   - Get Started:
     - Welcome to UCDP-GLBL: index.md
     - Contributing: contributing.md
+  - API:
+    - Overview: api.md
+    - Memory Types: api/mem.md
+    - IRQ Types: api/irq.md
+    - Stream Types: api/stream.md
 
 plugins:
   - search

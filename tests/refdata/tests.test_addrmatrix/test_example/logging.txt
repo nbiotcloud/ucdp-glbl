@@ -1,4 +1,0 @@
-WARNING  ucdp_glbl.addrmatrix  AddrMatrix(): interconnect dsp -> periph already exists
-WARNING  ucdp_glbl.addrmatrix  AddrMatrix(): interconnect ext -> misc already exists
-WARNING  ucdp_glbl.addrmatrix  AddrMatrix(): AddrSlave(name='periph') has no masters
-WARNING  ucdp_glbl.addrmatrix  AddrMatrix(): AddrSlave(name='misc') has no masters

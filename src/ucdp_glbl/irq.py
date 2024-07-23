@@ -22,27 +22,47 @@
 # SOFTWARE.
 #
 
-"""Command Line Interface."""
-
-import click
-from ucdp import cli
-
-from .addrmapfinder import get_addrmap
-
-
-@click.command(
-    help=f"""
-Load Data Model and List Address Map.
-
-TOP: Top Module. {cli.PAT_TOPMODREF}. Environment Variable 'UCDP_TOP'
 """
-)
-@cli.arg_top
-@cli.opt_path
-@click.option("--full", "-f", is_flag=True)
-@cli.pass_ctx
-def lsaddrmap(ctx, top, path, full):
-    """Check."""
-    top = cli.load_top(ctx, top, path)
-    addrmap = get_addrmap(top.mod)
-    print(addrmap.get_overview(minimal=not full))
+Interrupt Types.
+"""
+
+import ucdp as u
+
+
+class LevelIrqType(u.AEnumType):
+    """
+    Level IRQ.
+
+        >>> import ucdp_glbl
+        >>> irq = ucdp_glbl.irq.LevelIrqType()
+        >>> irq
+        LevelIrqType()
+        >>> irq.width
+        1
+        >>> for item in irq.values(): print(item)
+        EnumItem(0, 'idle')
+        EnumItem(1, 'active')
+    """
+
+    keytype: u.BitType = u.BitType()
+
+    comment: str = "Level IRQ"
+
+    def _build(self) -> None:
+        self._add(0, "idle")
+        self._add(1, "active")
+
+
+class ToggleIrqType(u.BitType):
+    """
+    Toggle IRQ.
+
+        >>> import ucdp_glbl
+        >>> irq = ucdp_glbl.irq.LevelIrqType()
+        >>> irq
+        LevelIrqType()
+        >>> irq.width
+        1
+    """
+
+    comment: str = "Toggle IRQ"

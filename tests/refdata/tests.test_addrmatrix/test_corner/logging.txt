@@ -1,4 +1,0 @@
-WARNING  ucdp_glbl.addrmatrix  AddrMatrix(): AddrMaster(name='mst') has no slaves
-WARNING  ucdp_glbl.addrmatrix  AddrMatrix(): AddrSlave(name='slv') has no masters
-WARNING  ucdp_glbl.addrmatrix  Master 'foo' is not known
-WARNING  ucdp_glbl.addrmatrix  Slaves 'bar' is not known

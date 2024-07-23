@@ -24,7 +24,7 @@
 
 [project]
 name = "ucdp-glbl"
-version = "0.6.0"
+version = "0.7.0"
 description = "Unified Chip Design Platform - Global"
 readme = "README.md"
 authors = [
@@ -35,7 +35,7 @@ classifiers = [
 ]
 requires-python = ">=3.10.0,<4.0"
 dependencies = [
-    "ucdp>=0.6.0",
+    "ucdp>=0.8.0",
 ]
 
 [project.urls]
@@ -71,9 +71,6 @@ doc = [
 
 [tool.pdm.build]
 includes = ["src/ucdp_glbl"]
-
-[project.entry-points."ucdp.cli"]
-lsaddrmap = "ucdp_glbl.cli.lsaddrmap"
 
 [tool.ruff]
 line-length = 120
