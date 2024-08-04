@@ -98,7 +98,7 @@ class MemIoType(u.AStructType):
     writable: bool
     slicewidths: SliceWidths | None = None
     err: bool = False
-    addressing: Literal["byte", "word"] = "byte"
+    addressing: Literal["byte", "data"] = "byte"
 
     def _build(self):
         datatype = u.UintType(self.datawidth)
