@@ -24,7 +24,7 @@
 
 [project]
 name = "ucdp-glbl"
-version = "0.7.0"
+version = "0.7.2"
 description = "Unified Chip Design Platform - Global"
 readme = "README.md"
 authors = [
