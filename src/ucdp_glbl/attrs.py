@@ -41,6 +41,7 @@ class Attr(u.NamedLightObject):
     Immutable Key-Value Pair.
     """
 
+    name: str = u.Field(pattern=u.PAT_IDENTIFIER)
     value: str | None = None
 
     _posargs: u.ClassVar[u.PosArgs] = ("name",)
@@ -51,7 +52,7 @@ class Attr(u.NamedLightObject):
     def __str__(self) -> str:
         if self.value is None:
             return self.name
-        return f"{self.name}={self.value!r}"
+        return f"{self.name}={self.value}"
 
     @staticmethod
     def cast(attr: Union["Attr", str]) -> "Attr":
@@ -97,6 +98,9 @@ def cast_attrs(attrs: Union["Attrs", u.Names, dict, None]) -> "Attrs":
         attrs = tuple(Attr(name, value=value) for name, value in attrs.items())
     if not isinstance(attrs, tuple) or not all(isinstance(attr, Attr) for attr in attrs):
         attrs = tuple(Attr.cast(attr) for attr in u.split(attrs))
+    # check for duplicates
+    if len(set(dict(attrs))) != len(attrs):
+        raise ValueError(f"Duplicates in {format_attrs(attrs)!r}")
     return attrs
 
 
@@ -106,9 +110,9 @@ def format_attrs(attrs: Attrs) -> str:
 
     >>> attrs = (Attr('a', value='1'), Attr('b'))
     >>> format_attrs(attrs)
-    "a='1';b"
+    'a=1; b'
     """
-    return ";".join(str(attr) for attr in attrs)
+    return "; ".join(str(attr) for attr in attrs)
 
 
 CastableAttrs = Annotated[
