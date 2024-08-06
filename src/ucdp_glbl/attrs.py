@@ -26,54 +26,89 @@
 Attributes.
 """
 
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, Union
 
 import ucdp as u
 from pydantic import (
     BeforeValidator,
 )
 
-Attr: TypeAlias = tuple[str, str]
+
+class Attr(u.NamedLightObject):
+    """
+    Attribute.
+
+    Immutable Key-Value Pair.
+    """
+
+    value: str | None = None
+
+    _posargs: u.ClassVar[u.PosArgs] = ("name",)
+
+    def __init__(self, name: str, value: str | None = None):
+        super().__init__(name=name, value=value)
+
+    def __str__(self) -> str:
+        if self.value is None:
+            return self.name
+        return f"{self.name}={self.value!r}"
+
+    @staticmethod
+    def cast(attr: Union["Attr", str]) -> "Attr":
+        """
+        Cast Attribute.
+
+        >>> Attr.cast(Attr('one'))
+        Attr('one')
+        >>> Attr.cast("one")
+        Attr('one')
+        >>> Attr.cast("one=2")
+        Attr('one', value='2')
+        """
+        if isinstance(attr, Attr):
+            return attr
+        if "=" in attr:
+            name, value = attr.split("=", 1)
+            return Attr(name=name, value=value)
+        return Attr(name=attr)
+
+
 Attrs: TypeAlias = tuple[Attr, ...]
 
 
-def cast_attrs(attrs: Attrs | u.Names | None) -> Attrs:
+def cast_attrs(attrs: Union["Attrs", u.Names, dict, None]) -> "Attrs":
     """
     Cast Attributes.
 
     >>> cast_attrs({'a': '1', 'b': '2'})
-    (('a', '1'), ('b', '2'))
-    >>> cast_attrs((('a', '1'), ('b', '2')))
-    (('a', '1'), ('b', '2'))
+    (Attr('a', value='1'), Attr('b', value='2'))
     >>> cast_attrs(("a=1", "b=2"))
-    (('a', '1'), ('b', '2'))
+    (Attr('a', value='1'), Attr('b', value='2'))
     >>> cast_attrs("a=1; b=2")
-    (('a', '1'), ('b', '2'))
+    (Attr('a', value='1'), Attr('b', value='2'))
     >>> cast_attrs("")
     ()
     >>> cast_attrs(None)
     ()
-    >>> cast_attrs((('a', '1'), ('b', '2', 'toomuch')))
-    Traceback (most recent call last):
-        ...
-    ValueError: Invalid Attr ('b', '2', 'toomuch')
     """
     if not attrs:
         return ()
     if isinstance(attrs, dict):
-        return tuple(attrs.items())
-    return tuple(cast_attr(attr) for attr in u.split(attrs))
+        attrs = tuple(Attr(name, value=value) for name, value in attrs.items())
+    if not isinstance(attrs, tuple) or not all(isinstance(attr, Attr) for attr in attrs):
+        attrs = tuple(Attr.cast(attr) for attr in u.split(attrs))
+    return attrs
 
 
-def cast_attr(attr: Attr | str) -> Attr:
+def format_attrs(attrs: Attrs) -> str:
     """
-    Cast Attribute.
+    Format Attributes.
+
+    >>> attrs = (Attr('a', value='1'), Attr('b'))
+    >>> format_attrs(attrs)
+    "a='1';b"
     """
-    if isinstance(attr, str):
-        return tuple(attr.split("=", 1)) if "=" in attr else (attr, "")  # type: ignore[return-value]
-    if isinstance(attr, tuple) and len(attr) == 2:  # noqa: PLR2004
-        return attr
-    raise ValueError(f"Invalid Attr {attr}")
+    return ";".join(str(attr) for attr in attrs)
 
 
 CastableAttrs = Annotated[

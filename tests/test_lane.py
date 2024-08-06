@@ -26,6 +26,7 @@
 Test Lanes.
 """
 
+from ucdp_glbl.attrs import Attr, Attrs
 from ucdp_glbl.lane import Lane
 
 
@@ -34,14 +35,14 @@ def test_lane():
     lane = Lane(name="one", size="8k")
     assert lane.name == "one"
     assert lane.size == 8 * 1024
-    assert lane.attrs == ()
+    assert lane.attrs == Attrs()
 
     assert hash(lane)
 
 
 def test_lane_attrs():
     """Lane Attributes."""
-    assert Lane(name="a", size=1, attrs="").attrs == ()
-    assert Lane(name="a", size=1, attrs="b").attrs == (("b", ""),)
-    assert Lane(name="a", size=1, attrs="b=1").attrs == (("b", "1"),)
-    assert Lane(name="a", size=1, attrs="b=1;c").attrs == (("b", "1"), ("c", ""))
+    assert Lane(name="a", size=1, attrs="").attrs == Attrs()
+    assert Lane(name="a", size=1, attrs="b").attrs == (Attr("b"),)
+    assert Lane(name="a", size=1, attrs="b=1").attrs == (Attr("b", value="1"),)
+    assert Lane(name="a", size=1, attrs="b=1;c").attrs == (Attr("b", value="1"), Attr("c"))

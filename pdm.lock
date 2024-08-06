@@ -5,7 +5,7 @@
 groups = ["default", "checktypes", "doc", "format", "test"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:3a59e6d5bf1674c6abdeeb74be250dd4a4bd2872cc309054928d1e406de7bfd7"
+content_hash = "sha256:d3ace8b0361b365a338872dfecb478c90748c89b49fa8fcba8280dc6d4ec927d"
 
 [[metadata.targets]]
 requires_python = ">=3.10.0,<4.0"
@@ -1474,7 +1474,7 @@ files = [
 
 [[package]]
 name = "ucdp"
-version = "0.13.0"
+version = "0.15.1"
 requires_python = "<4.0,>=3.10.0"
 summary = "Unified Chip Design Platform"
 groups = ["default"]
@@ -1493,8 +1493,8 @@ dependencies = [
     "uniquer>=1.0.2",
 ]
 files = [
-    {file = "ucdp-0.13.0-py3-none-any.whl", hash = "sha256:0c95c53a6e1d5b0d77d40a9fe2467c763072cc51c63f415c0b045b0a63a8f350"},
-    {file = "ucdp-0.13.0.tar.gz", hash = "sha256:31dd637067ad0c8d101811536eda6ddb1f936f2aabfd60190da33235e5e5576c"},
+    {file = "ucdp-0.15.1-py3-none-any.whl", hash = "sha256:bca35852db6b38cfb483b7eec22a773b42e95a64405219ecba9b37e6270ada79"},
+    {file = "ucdp-0.15.1.tar.gz", hash = "sha256:e27655d6bc2f68d2e0389a5573f6a590f089796c8e02ed372b72c259da424983"},
 ]
 
 [[package]]
