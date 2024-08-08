@@ -33,7 +33,7 @@ import ucdp as u
 from .attrs import CastableAttrs
 
 
-class Lane(u.NamedLightObject):
+class Lane(u.IdentLightObject):
     """Lane."""
 
     size: u.Bytesize | None = None
@@ -43,27 +43,44 @@ class Lane(u.NamedLightObject):
     """Attributes."""
 
 
+class DefaultLane(Lane):
+    """Default Lane."""
+
+    name: str = u.Field(init=False, default="")
+
+
 Lanes: TypeAlias = tuple[Lane, ...]
 
 
-def fill_lanes(lanes: Lanes, size: u.Bytesize) -> Lanes:
+def fill_lanes(lanes: Lanes, size: u.Bytesize, default: bool = False) -> Lanes:
     """
     Fill Empty Lane Sizes.
 
-    >>> fill_lanes((Lane(name='a'), Lane(name='b')), u.Bytesize('48kB'))
-    (Lane(name='a', size=Bytesize('24 KB')), Lane(name='b', size=Bytesize('24 KB')))
-    >>> fill_lanes((Lane(name='a', size='24k'), Lane(name='b', size='24k')), u.Bytesize('48kB'))
-    (Lane(name='a', size=Bytesize('24 KB')), Lane(name='b', size=Bytesize('24 KB')))
+    Fill undefined lane sizes:
 
-    >>> fill_lanes((Lane(name='a', size='48k'), Lane(name='b')), u.Bytesize('48kB'))
-    Traceback (most recent call last):
-        ...
-    ValueError: Lanes (Lane(name='a', size=Bytesize('48 KB')), Lane(name='b')) exceed size 48 KB
-    >>> fill_lanes((Lane(name='a', size='24k'), Lane(name='b', size='25k')), u.Bytesize('48kB'))
-    Traceback (most recent call last):
-        ...
-    ValueError: Lanes (Lane(name='a', size=Bytesize('24 KB')), Lane(name='b', size=Bytesize('25 KB'))) exceed size 48 KB
+        >>> fill_lanes((Lane(name='a'), Lane(name='b')), u.Bytesize('48kB'))
+        (Lane(name='a', size=Bytesize('24 KB')), Lane(name='b', size=Bytesize('24 KB')))
+        >>> fill_lanes((Lane(name='a', size='24k'), Lane(name='b', size='24k')), u.Bytesize('48kB'))
+        (Lane(name='a', size=Bytesize('24 KB')), Lane(name='b', size=Bytesize('24 KB')))
+
+        >>> fill_lanes((Lane(name='a', size='48k'), Lane(name='b')), u.Bytesize('48kB'))
+        Traceback (most recent call last):
+            ...
+        ValueError: Lanes (Lane(name='a', size=Bytesize('48 KB')), Lane(name='b')) exceed size 48 KB
+        >>> fill_lanes((Lane(name='a', size='24k'), Lane(name='b', size='25k')), u.Bytesize('48kB'))
+        Traceback (most recent call last):
+            ...
+        ValueError: Lanes (Lane(name='a', ... exceed size 48 KB
+
+    Empty lanes:
+
+        >>> fill_lanes((), u.Bytesize('48kB'))
+        ()
+        >>> fill_lanes((), u.Bytesize('48kB'), default=True)
+        (DefaultLane(size=Bytesize('48 KB')),)
     """
+    if not lanes and default:
+        return (DefaultLane(size=size),)
     used = 0
     missing = 0
     for lane in lanes:

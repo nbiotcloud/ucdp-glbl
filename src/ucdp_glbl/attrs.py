@@ -34,14 +34,13 @@ from pydantic import (
 )
 
 
-class Attr(u.NamedLightObject):
+class Attr(u.IdentLightObject):
     """
     Attribute.
 
     Immutable Key-Value Pair.
     """
 
-    name: str = u.Field(pattern=u.PAT_IDENTIFIER)
     value: str | None = None
 
     _posargs: u.ClassVar[u.PosArgs] = ("name",)
