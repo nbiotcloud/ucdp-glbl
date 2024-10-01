@@ -26,10 +26,7 @@
 Design For Test.
 """
 
-from typing import Any
-
 import ucdp as u
-
 
 
 class TestModeType(u.AEnumType):
@@ -65,7 +62,7 @@ class ScanModeType(u.AEnumType):
 
     keytype: u.BitType = u.BitType()
 
-    comment:str = "Logic Scan-Test Mode"
+    comment: str = "Logic Scan-Test Mode"
 
     def _build(self) -> None:
         self._add(0, "func", "Functional Mode")
@@ -73,7 +70,6 @@ class ScanModeType(u.AEnumType):
 
 
 class ScanShiftType(u.AEnumType):
-
     """
     Scan Shift.
 
@@ -104,7 +100,7 @@ class MbistModeType(u.AEnumType):
 
     keytype: u.BitType = u.BitType()
 
-    comment:str = "Memory Built-In Self-Test"
+    comment: str = "Memory Built-In Self-Test"
 
     def _build(self) -> None:
         self._add(0, "func", "Functional Mode")
@@ -112,7 +108,6 @@ class MbistModeType(u.AEnumType):
 
 
 class DftModeType(u.AStructType):
-
     """
     DFT Modes.
 
@@ -125,7 +120,6 @@ class DftModeType(u.AStructType):
 
     comment: str = "Test Control"
 
-
     def _build(self) -> None:
         self._add("test_mode", TestModeType(), title="Test Mode")
         self._add("scan_mode", ScanModeType(), title="Scan Mode")
@@ -134,7 +128,6 @@ class DftModeType(u.AStructType):
 
 
 class JtagType(u.AStructType):
-
     """
     JTAG Type.
 
@@ -157,7 +150,6 @@ class JtagType(u.AStructType):
 
 
 class ScanDataType(u.AStructType):
-
     """
     Scan Data.
 
@@ -181,7 +173,7 @@ class ScanDataType(u.AStructType):
 
     """
 
-    comment:str = "Scan Chain Data"
+    comment: str = "Scan Chain Data"
     width: int = 8
 
     def _build(self) -> None:
