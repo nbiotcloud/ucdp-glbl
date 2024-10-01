@@ -178,7 +178,7 @@ addopts = """
     --doctest-modules
     --ignore=noxfile.py
     --ignore-glob=tests/testdata*
-    --log-level=DEBUG
+    --log-level=INFO
     --junitxml=report.xml
 """
 filterwarnings = [
