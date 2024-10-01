@@ -23,7 +23,9 @@
 #
 
 """
-Attributes.
+Generic Attributes.
+
+These are handy and type save key-value-pairs.
 """
 
 from typing import Annotated, TypeAlias, Union
@@ -45,7 +47,7 @@ class Attr(u.IdentLightObject):
 
     _posargs: u.ClassVar[u.PosArgs] = ("name",)
 
-    def __init__(self, name: str, value: str | None = None):
+    def __init__(self, name: str, value: str | None = None) -> None:
         super().__init__(name=name, value=value)
 
     def __str__(self) -> str:
@@ -58,12 +60,13 @@ class Attr(u.IdentLightObject):
         """
         Cast Attribute.
 
-        >>> Attr.cast(Attr('one'))
-        Attr('one')
-        >>> Attr.cast("one")
-        Attr('one')
-        >>> Attr.cast("one=2")
-        Attr('one', value='2')
+            >>> Attr.cast(Attr('one'))
+            Attr('one')
+            >>> Attr.cast("one")
+            Attr('one')
+            >>> Attr.cast("one=2")
+            Attr('one', value='2')
+
         """
         if isinstance(attr, Attr):
             return attr
@@ -80,16 +83,16 @@ def cast_attrs(attrs: Union["Attrs", u.Names, dict, None]) -> "Attrs":
     """
     Cast Attributes.
 
-    >>> cast_attrs({'a': '1', 'b': '2'})
-    (Attr('a', value='1'), Attr('b', value='2'))
-    >>> cast_attrs(("a=1", "b=2"))
-    (Attr('a', value='1'), Attr('b', value='2'))
-    >>> cast_attrs("a=1; b=2")
-    (Attr('a', value='1'), Attr('b', value='2'))
-    >>> cast_attrs("")
-    ()
-    >>> cast_attrs(None)
-    ()
+        >>> cast_attrs({'a': '1', 'b': '2'})
+        (Attr('a', value='1'), Attr('b', value='2'))
+        >>> cast_attrs(("a=1", "b=2"))
+        (Attr('a', value='1'), Attr('b', value='2'))
+        >>> cast_attrs("a=1; b=2")
+        (Attr('a', value='1'), Attr('b', value='2'))
+        >>> cast_attrs("")
+        ()
+        >>> cast_attrs(None)
+        ()
     """
     if not attrs:
         return ()
@@ -107,9 +110,10 @@ def format_attrs(attrs: Attrs) -> str:
     """
     Format Attributes.
 
-    >>> attrs = (Attr('a', value='1'), Attr('b'))
-    >>> format_attrs(attrs)
-    'a=1; b'
+        >>> attrs = (Attr('a', value='1'), Attr('b'))
+        >>> format_attrs(attrs)
+        'a=1; b'
+
     """
     return "; ".join(str(attr) for attr in attrs)
 

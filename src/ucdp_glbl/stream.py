@@ -26,6 +26,8 @@
 Streaming Types.
 """
 
+from typing import Any
+
 import ucdp as u
 
 
@@ -78,7 +80,7 @@ class AStreamType(u.AStructType):
     Abstract Stream Type.
     """
 
-    def _build(self):
+    def _build(self) -> None:
         self._add("valid", ValidType(), u.FWD)
         self._add("accept", AcceptType(), u.BWD)
 
@@ -95,11 +97,33 @@ class StreamType(AStreamType):
         StructItem('data', UintType(8))
     """
 
-    width: int
+    width: int | u.Expr
 
-    def __init__(self, width, **kwargs):
+    def __init__(self, width: int | u.Expr, **kwargs: dict[str, Any]) -> None:
         super().__init__(width=width, **kwargs)
 
-    def _build(self):
+    def _build(self) -> None:
         super()._build()
         self._add("data", u.UintType(self.width))
+
+
+class AnyStreamType(AStreamType):
+    """
+    Any Stream Type.
+
+        >>> import ucdp_glbl
+        >>> stream = ucdp_glbl.stream.AnyStreamType(u.SintType(16))
+        >>> for item in stream.values(): print(item)
+        StructItem('valid', ValidType())
+        StructItem('accept', AcceptType(), orientation=BWD)
+        StructItem('data', SintType(16))
+    """
+
+    type_: u.BaseType
+
+    def __init__(self, type_: u.BaseType, **kwargs: dict[str, Any]) -> None:
+        super().__init__(type_=type_, **kwargs)
+
+    def _build(self) -> None:
+        super()._build()
+        self._add("data", self.type_)

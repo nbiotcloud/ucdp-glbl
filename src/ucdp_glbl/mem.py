@@ -100,7 +100,7 @@ class MemIoType(u.AStructType):
     err: bool = False
     addressing: Literal["byte", "data"] = "byte"
 
-    def _build(self):
+    def _build(self) -> None:
         datatype = u.UintType(self.datawidth)
         addrtype = u.UintType(self.addrwidth)
         self._add("ena", u.EnaType(), title="Memory Access Enable")

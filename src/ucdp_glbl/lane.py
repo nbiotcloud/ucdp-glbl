@@ -56,8 +56,6 @@ def fill_lanes(lanes: Lanes, size: u.Bytesize, default: bool = False) -> Lanes:
     """
     Fill Empty Lane Sizes.
 
-    Fill undefined lane sizes:
-
         >>> fill_lanes((Lane(name='a'), Lane(name='b')), u.Bytesize('48kB'))
         (Lane(name='a', size=Bytesize('24 KB')), Lane(name='b', size=Bytesize('24 KB')))
         >>> fill_lanes((Lane(name='a', size='24k'), Lane(name='b', size='24k')), u.Bytesize('48kB'))
