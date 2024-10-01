@@ -3,8 +3,9 @@
 from pathlib import Path
 
 import ucdp as u
-import ucdp_glbl
 from pytest import fixture
+
+import ucdp_glbl
 
 
 @fixture

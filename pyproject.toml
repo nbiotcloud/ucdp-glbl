@@ -128,15 +128,15 @@ select = [
     # pyupgrade
     "UP",
     # annotation
-    # "ANN"
+    "ANN",
     # bandit
     "S",
     # Argument
-    # "ARG",
+    "ARG",
     # Pathlib
     "PTH",
     # Simplify
-    # "SIM",
+    "SIM",
     # Return
     "RET",
     # Raise
@@ -157,13 +157,17 @@ ignore = [
     'UP038',
     # Assert
     'S101',
+    # Annotation of self
+    'ANN101',
 ]
 [tool.ruff.lint.per-file-ignores]
-"test_*" = [
+"tests/*" = [
     # Magic Values
     "PLR2004",
     # Argument
     "ARG001",
+    # Annotate
+    "ANN201",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -178,7 +182,7 @@ addopts = """
     --doctest-modules
     --ignore=noxfile.py
     --ignore-glob=tests/testdata*
-    --log-level=DEBUG
+    --log-level=INFO
     --junitxml=report.xml
 """
 filterwarnings = [

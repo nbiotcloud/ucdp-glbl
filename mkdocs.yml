@@ -31,9 +31,11 @@ nav:
     - Welcome to UCDP-GLBL: index.md
     - Contributing: contributing.md
   - API:
-    - Overview: api.md
-    - Memory Types: api/mem.md
+    - Attributes: api/attrs.md
+    - DFT Types: api/dft.md
     - IRQ Types: api/irq.md
+    - Lanes: api/lane.md
+    - Memory Types: api/mem.md
     - Stream Types: api/stream.md
 
 plugins:
