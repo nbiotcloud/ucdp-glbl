@@ -24,7 +24,7 @@
 
 [project]
 name = "ucdp-glbl"
-version = ["dynamic"]
+dynamic = ["version"]
 description = "Unified Chip Design Platform - Global"
 readme = "README.md"
 authors = [
