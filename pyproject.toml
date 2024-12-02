@@ -24,7 +24,7 @@
 
 [project]
 name = "ucdp-glbl"
-version = "1.3.0"
+version = ["dynamic"]
 description = "Unified Chip Design Platform - Global"
 readme = "README.md"
 authors = [
@@ -46,6 +46,9 @@ dependencies = [
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool.pdm.version]
+source = "scm"
 
 [tool.pdm]
 [tool.pdm.dev-dependencies]
