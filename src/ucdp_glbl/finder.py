@@ -25,8 +25,6 @@
 """
 Find Module With Specific Attribute Or Method.
 
-Example:
-
     >>> import ucdp as u
     >>> class SubMod(u.AMod):
     ...     def _build(self):
