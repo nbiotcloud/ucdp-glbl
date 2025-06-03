@@ -31,6 +31,10 @@ from typing import Literal, TypeAlias
 import ucdp as u
 
 SliceWidths: TypeAlias = tuple[int | u.Expr, ...]
+"""Word Slice Widths."""
+
+Addressing: TypeAlias = Literal["byte", "data"]
+"""Address Mode."""
 
 
 class MemIoType(u.AStructType):
@@ -98,7 +102,7 @@ class MemIoType(u.AStructType):
     writable: bool
     slicewidths: SliceWidths | None = None
     err: bool = False
-    addressing: Literal["byte", "data"] = "byte"
+    addressing: Addressing = "byte"
 
     def _build(self) -> None:
         datatype = u.UintType(self.datawidth)
@@ -122,7 +126,7 @@ class MemIoType(u.AStructType):
         slicewidth: int | u.Expr | None = None,
         err: bool = False,
     ) -> "MemIoType":
-        """With Slices."""
+        """Create `MemIoType` based on given `slicewidth` instead of individual `slicewidths`."""
         slicewidths = calc_slicewidths(datawidth, slicewidth)
         return MemIoType(datawidth=datawidth, addrwidth=addrwidth, writable=writable, slicewidths=slicewidths, err=err)
 

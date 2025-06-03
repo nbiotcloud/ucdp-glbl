@@ -26,6 +26,17 @@
 Generic Attributes.
 
 These are handy and type save key-value-pairs.
+
+    >>> cast_attrs({'a': '1', 'b': '2'})
+    (Attr('a', value='1'), Attr('b', value='2'))
+    >>> cast_attrs(("a=1", "b=2"))
+    (Attr('a', value='1'), Attr('b', value='2'))
+    >>> cast_attrs("a=1; b=2")
+    (Attr('a', value='1'), Attr('b', value='2'))
+    >>> as_dict(cast_attrs("a=1; b=2"))
+    {'a': '1', 'b': '2'}
+    >>> as_tuple(cast_attrs("a=1; b=2"))
+    (('a', '1'), ('b', '2'))
 """
 
 from typing import Annotated, TypeAlias, Union
@@ -58,7 +69,7 @@ class Attr(u.IdentLightObject):
     @staticmethod
     def cast(attr: Union["Attr", str]) -> "Attr":
         """
-        Cast Attribute.
+        Cast To Attribute.
 
             >>> Attr.cast(Attr('one'))
             Attr('one')
@@ -81,7 +92,7 @@ Attrs: TypeAlias = tuple[Attr, ...]
 
 def cast_attrs(attrs: Union["Attrs", u.Names, dict, None]) -> "Attrs":
     """
-    Cast Attributes.
+    Cast To Attributes.
 
         >>> cast_attrs({'a': '1', 'b': '2'})
         (Attr('a', value='1'), Attr('b', value='2'))
@@ -102,20 +113,33 @@ def cast_attrs(attrs: Union["Attrs", u.Names, dict, None]) -> "Attrs":
         attrs = tuple(Attr.cast(attr) for attr in u.split(attrs))
     # check for duplicates
     if len(set(dict(attrs))) != len(attrs):
-        raise ValueError(f"Duplicates in {format_attrs(attrs)!r}")
+        raise ValueError(f"Duplicates in {as_str(attrs)!r}")
     return attrs
 
 
-def format_attrs(attrs: Attrs) -> str:
+def as_str(attrs: Attrs) -> str:
     """
-    Format Attributes.
+    Return Attributes As String.
 
         >>> attrs = (Attr('a', value='1'), Attr('b'))
-        >>> format_attrs(attrs)
+        >>> as_str(attrs)
         'a=1; b'
 
     """
     return "; ".join(str(attr) for attr in attrs)
+
+
+format_attrs = as_str
+
+
+def as_dict(attrs: Attrs) -> dict[str, str | None]:
+    """Return Attributes As Dictionary."""
+    return {attr.name: attr.value for attr in attrs}
+
+
+def as_tuple(attrs: Attrs) -> tuple[tuple[str, str | None], ...]:
+    """Return Attributes As Tuple."""
+    return tuple((attr.name, attr.value) for attr in attrs)
 
 
 CastableAttrs = Annotated[
