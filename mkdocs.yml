@@ -29,14 +29,7 @@ nav:
   - Home:
       - Welcome to UCDP-GLBL: index.md
       - Contributing: contributing.md
-  - API:
-      - Attributes: api/attrs.md
-      - DFT Types: api/dft.md
-      - Finder: api/finder.md
-      - IRQ Types: api/irq.md
-      - Lanes: api/lane.md
-      - Memory Types: api/mem.md
-      - Stream Types: api/stream.md
+  - API: api/
 
 plugins:
   - search

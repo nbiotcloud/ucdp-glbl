@@ -35,6 +35,9 @@ class ValidType(u.AEnumType):
     """
     Valid Type.
 
+    A signal of that type indicates if the related data is valid,
+    driven by the transmitter.
+
         >>> import ucdp_glbl
         >>> valid = ucdp_glbl.stream.ValidType()
         >>> valid
@@ -57,6 +60,9 @@ class AcceptType(u.AEnumType):
     """
     Accept Type.
 
+    A signal of that type indicates if the related data is taken over,
+    driven by the receiver.
+
         >>> import ucdp_glbl
         >>> accept = ucdp_glbl.stream.AcceptType()
         >>> accept
@@ -78,6 +84,9 @@ class AcceptType(u.AEnumType):
 class AStreamType(u.AStructType):
     """
     Abstract Stream Type.
+
+    A stream contains at least a `valid` and `accept` member.
+    It is up to the child classes to define the corresponding data.
     """
 
     def _build(self) -> None:
@@ -87,7 +96,7 @@ class AStreamType(u.AStructType):
 
 class StreamType(AStreamType):
     """
-    Simple Stream Type.
+    Simple Stream Type with one `data` signal.
 
         >>> import ucdp_glbl
         >>> stream = ucdp_glbl.stream.StreamType(8)

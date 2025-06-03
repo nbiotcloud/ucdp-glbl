@@ -53,7 +53,7 @@ import ucdp as u
 
 
 def find(mods: Iterable[u.BaseMod], name: str) -> tuple[u.BaseMod, Any]:
-    """Find module with `name` attribute, starting from top to bottom."""
+    """Find module with attribute named `name`, starting from top to bottom."""
     undefined = object()
     attrs: list[Any] = []
     attrmods: list[u.BaseMod] = []

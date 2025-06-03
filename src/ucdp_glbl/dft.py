@@ -23,7 +23,7 @@
 #
 
 """
-Design For Test.
+Generic Design For Test Types.
 """
 
 import ucdp as u

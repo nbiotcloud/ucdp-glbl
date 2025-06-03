@@ -23,7 +23,9 @@
 #
 
 """
-Lanes.
+Generic Lanes.
+
+A lane is anything which is related to any size and optionally additional attributes.
 """
 
 from typing import TypeAlias
